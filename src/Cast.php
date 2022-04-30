@@ -68,7 +68,6 @@ class Cast
             $propTypeName = "";
             if ($propType !== null) $propTypeName = $propType->getName();
 
-            print("$propTypeName $propName \r\n");
             if (isset($o->$propName)) {
                 $obj->$propName = Cast::cast($propTypeName, $o->$propName);
             } else {
