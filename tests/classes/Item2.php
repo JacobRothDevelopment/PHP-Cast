@@ -2,7 +2,12 @@
 
 class Item2
 {
-    public string $name;
-    public string $type;
+    public int $id;
+    public string $string;
     public bool $active;
+
+    function __toString()
+    {
+        return "this is from __toString()";
+    }
 }
