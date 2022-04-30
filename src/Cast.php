@@ -2,9 +2,6 @@
 
 namespace PhpCast;
 
-use Exception;
-use ReflectionClass;
-
 class Cast
 {
     /** Cast any data to a different type
@@ -23,7 +20,6 @@ class Cast
             case 'null':
                 return null;
                 break;
-            case 'integer':
             case 'int':
                 return (int)$data;
                 break;
@@ -35,7 +31,6 @@ class Cast
                 return (string)$data;
                 break;
             case 'bool':
-            case 'boolean':
                 return (bool)$data;
                 break;
             case 'array':
@@ -57,7 +52,7 @@ class Cast
 
     private static function castToClass(string $class, $o)
     {
-        $refClass = new ReflectionClass($class);
+        $refClass = new \ReflectionClass($class);
         $obj = new $class;
         $refProps = $refClass->getProperties();
         foreach ($refProps as $refProp) {
