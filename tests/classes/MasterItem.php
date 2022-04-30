@@ -2,6 +2,7 @@
 
 class MasterItem
 {
-    public Item $item;
-    public Item2 $item2;
+    public Item $item1;
+    public Item $item2;
+    public ?Item $item3;
 }
