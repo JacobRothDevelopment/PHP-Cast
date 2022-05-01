@@ -9,6 +9,5 @@ class Item
     public array $array;
     public object $object;
     public float $float;
-    // public mixed $mixedP; // mixed is only valid for php 8^
     public $missing;
 }

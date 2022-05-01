@@ -7,8 +7,7 @@ class Cast
     /** Cast any data to a different type
      * @param mixed $data
      * @param string $castType ex. `int`, `object`, or some custom class
-     * @return mixed I suggest you use phpdoc `@var` to type hint the 
-     * returned value 
+     * @return mixed It will be the same type as the inputted castType 
      */
     public static function cast(string $castType, $data)
     {
@@ -37,8 +36,10 @@ class Cast
                 return (array)$data;
                 break;
             case 'object':
-            case 'stdClass':
                 return (object)$data;
+                break;
+            case 'stdClass':
+                return (object)(array)$data;
                 break;
             default: // assume these are custom types
                 /* force input data to be object. 

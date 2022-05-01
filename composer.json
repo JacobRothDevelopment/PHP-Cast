@@ -1,0 +1,20 @@
+{
+  "name": "php-cast/php-cast",
+  "description": "Cast variables to different types. Native types, generic types, custom classes, nested classes, and more",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://github.com/JacobRothDevelopment/PHP-Cast",
+  "require": {
+    "php": "^7.4|^8.0"
+  },
+  "keywords": [
+    "cast",
+    "custom class",
+    "nested class"
+  ],
+  "autoload": {
+    "psr-4": {
+      "PhpCast\\": "/src/"
+    }
+  }
+}

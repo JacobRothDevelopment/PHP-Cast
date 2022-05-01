@@ -3,6 +3,15 @@
 require_once __DIR__ . "/loader.php";
 require_once __DIR__ . "/../src/Cast.php";
 
+function test(string $class, $value)
+{
+    try {
+        print(print_r(\PhpCast\Cast::cast($class, $value), true) . "\r\n");
+    } catch (\Error $e) {
+        print_r($e->getMessage() . "\r\n");
+    }
+}
+
 $item1 = [
     "id" => 10,
     "string" => "string name",
@@ -20,25 +29,26 @@ $item2 = [
     "id" => 11,
     "string" => "string name 2",
     "active" => false,
-    // "nullableInt" => null, // test missing nullable property
+    // test missing nullable property nullableInt
     "array" => [1, 2, 3],
     "object" => (object)[
         "id" => 3
     ],
     "float" => 10.003,
     "missing" => 10.003,
-    "extraParameter" => 909.3,
+    "extraParameter" => 909.3, // test property not in class
 ];
 
-$item2_2 = [
+$item2_2 = [ // I really need a better naming scheme
     "id" => 200,
     "string" => "string value 2200",
     "active" => true,
-]; // I really need a better naming scheme
+];
 
 $master = [
     "item1" => $item1,
     "item2" => $item2,
+    // missing nullable property item3
 ];
 
 $object1 = (object)$item1;
@@ -49,89 +59,90 @@ $fullItem->string = "string value";
 $fullItem->active = true;
 
 // Cast to int
-print(\PhpCast\Cast::cast("int", null) . "\r\n"); // 0
-print(\PhpCast\Cast::cast("int", 9) . "\r\n"); // 9
-print(\PhpCast\Cast::cast("int", false) . "\r\n"); // 0
-print(\PhpCast\Cast::cast("int", 9.2324) . "\r\n"); // 9
-print(\PhpCast\Cast::cast("int", "string") . "\r\n"); // 0
-print(\PhpCast\Cast::cast("int", "432") . "\r\n"); // 432
-print(\PhpCast\Cast::cast("int", "432.901") . "\r\n"); // 432
-print(\PhpCast\Cast::cast("int", []) . "\r\n"); // 0
-print(\PhpCast\Cast::cast("int", [1, 2, 3]) . "\r\n"); // 1
-print(\PhpCast\Cast::cast("int", [1.11, 2.22]) . "\r\n"); // 1
-print(\PhpCast\Cast::cast("int", (object)[]) . "\r\n"); // 1; Notice: Object of class stdClass could not be converted to int
-print(\PhpCast\Cast::cast("int", new Item()) . "\r\n"); // 1; Notice: Object of class Item could not be converted to int
+test("int", null); // 0
+test("int", 9); // 9
+test("int", false); // 0
+test("int", 9.2324); // 9
+test("int", "string"); // 0
+test("int", "432"); // 432
+test("int", "432.901"); // 432
+test("int", []); // 0
+test("int", [1, 2, 3]); // 1
+test("int", [1.11, 2.22]); // 1
+test("int", (object)[]); // 1; Notice: Object of class stdClass could not be converted to int
+test("int", new Item()); // 1; Notice: Object of class Item could not be converted to int
 
 // Cast to string
-print(\PhpCast\Cast::cast("string", null) . "\r\n"); // ""
-print(\PhpCast\Cast::cast("string", 9) . "\r\n"); // "9"
-print(\PhpCast\Cast::cast("string", false) . "\r\n"); // ""
-print(\PhpCast\Cast::cast("string", 9.2324) . "\r\n"); // "9.2324"
-print(\PhpCast\Cast::cast("string", "string") . "\r\n"); // "string"
-print(\PhpCast\Cast::cast("string", []) . "\r\n"); // "Array"; Notice: Array to string conversion
-print(\PhpCast\Cast::cast("string", (object)[]) . "\r\n"); // Fatal error: Uncaught Error: Object of class stdClass could not be converted to string
-print(\PhpCast\Cast::cast("string", new Item()) . "\r\n"); // Fatal error: Uncaught Error: Object of class Item could not be converted to string
-print(\PhpCast\Cast::cast("string", new Item2()) . "\r\n"); // "this is from __toString()"
+test("string", null); // ""
+test("string", 9); // "9"
+test("string", false); // ""
+test("string", 9.2324); // "9.2324"
+test("string", "string"); // "string"
+test("string", []); // "Array"; Notice: Array to string conversion
+test("string", (object)[]); // Fatal error: Uncaught Error: Object of class stdClass could not be converted to string
+test("string", new Item()); // Fatal error: Uncaught Error: Object of class Item could not be converted to string
+test("string", new Item2()); // "this is from __toString()"
 
 // Cast to float
-print(\PhpCast\Cast::cast("float", null) . "\r\n"); // 0
-print(\PhpCast\Cast::cast("float", 9) . "\r\n"); // 9
-print(\PhpCast\Cast::cast("float", false) . "\r\n"); // 0
-print(\PhpCast\Cast::cast("float", 9.2324) . "\r\n"); // 9.2324
-print(\PhpCast\Cast::cast("float", "string") . "\r\n"); // 0
-print(\PhpCast\Cast::cast("float", "432") . "\r\n"); // 432
-print(\PhpCast\Cast::cast("float", "432.901") . "\r\n"); // 432.901
-print(\PhpCast\Cast::cast("float", []) . "\r\n"); // 0
-print(\PhpCast\Cast::cast("float", []) . "\r\n"); // 0
-print(\PhpCast\Cast::cast("float", [1, 2, 3]) . "\r\n"); // 1
-print(\PhpCast\Cast::cast("float", [1.11, 2.22]) . "\r\n"); // 1
-print(\PhpCast\Cast::cast("float", (object)[]) . "\r\n"); // 1; Notice: Object of class stdClass could not be converted to float
-print(\PhpCast\Cast::cast("float", new Item()) . "\r\n"); // 1; Notice: Object of class Item could not be converted to float
+test("float", null); // 0
+test("float", 9); // 9
+test("float", false); // 0
+test("float", 9.2324); // 9.2324
+test("float", "string"); // 0
+test("float", "432"); // 432
+test("float", "432.901"); // 432.901
+test("float", []); // 0
+test("float", []); // 0
+test("float", [1, 2, 3]); // 1
+test("float", [1.11, 2.22]); // 1
+test("float", (object)[]); // 1; Notice: Object of class stdClass could not be converted to float
+test("float", new Item()); // 1; Notice: Object of class Item could not be converted to float
 
 // Cast to bool
-print(\PhpCast\Cast::cast("bool", null) . "\r\n"); // false
-print(\PhpCast\Cast::cast("bool", 9) . "\r\n"); // true
-print(\PhpCast\Cast::cast("bool", false) . "\r\n"); // false
-print(\PhpCast\Cast::cast("bool", 9.2324) . "\r\n"); // true
-print(\PhpCast\Cast::cast("bool", "string") . "\r\n"); // true
-print(\PhpCast\Cast::cast("bool", "432") . "\r\n"); // true
-print(\PhpCast\Cast::cast("bool", "") . "\r\n"); // false
-print(\PhpCast\Cast::cast("bool", []) . "\r\n"); // false
-print(\PhpCast\Cast::cast("bool", [1, 2, 3]) . "\r\n"); // true
-print(\PhpCast\Cast::cast("bool", (object)[]) . "\r\n"); // true
-print(\PhpCast\Cast::cast("bool", new Item()) . "\r\n"); // true
+test("bool", null); // false
+test("bool", 9); // true
+test("bool", false); // false
+test("bool", 9.2324); // true
+test("bool", "string"); // true
+test("bool", "432"); // true
+test("bool", ""); // false
+test("bool", []); // false
+test("bool", [1, 2, 3]); // true
+test("bool", (object)[]); // true
+test("bool", new Item()); // true
 
 // Cast to array
-print_r(\PhpCast\Cast::cast("array", null)); // Array ( )
-print_r(\PhpCast\Cast::cast("array", 9)); // Array ( [0] => 9 ) 
-print_r(\PhpCast\Cast::cast("array", false)); // Array ( [0] => ) 
-print_r(\PhpCast\Cast::cast("array", 9.2324)); // Array ( [0] => 9.2324 ) 
-print_r(\PhpCast\Cast::cast("array", "string")); // Array ( [0] => string ) 
-print_r(\PhpCast\Cast::cast("array", [])); // Array ( ) 
-print_r(\PhpCast\Cast::cast("array", (object)[])); // Array ( ) 
-print_r(\PhpCast\Cast::cast("array", new Item())); // Array ( [missing] => )
-print_r(\PhpCast\Cast::cast("array", $fullItem)); // Array ( [name] => string name [type] => string type [active] => 1 )
+test("array", null); // Array ( )
+test("array", 9); // Array ( [0] => 9 ) 
+test("array", false); // Array ( [0] => ) 
+test("array", 9.2324); // Array ( [0] => 9.2324 ) 
+test("array", "string"); // Array ( [0] => string ) 
+test("array", []); // Array ( ) 
+test("array", (object)[]); // Array ( ) 
+test("array", new Item()); // Array ( [missing] => )
+test("array", $fullItem); // Array ( [name] => string name [type] => string type [active] => 1 )
 
-// Cast to object
-print_r(\PhpCast\Cast::cast("object", null)); // stdClass Object ( ) 
-print_r(\PhpCast\Cast::cast("object", 9)); // stdClass Object ( [scalar] => 9 ) 
-print_r(\PhpCast\Cast::cast("object", false)); // stdClass Object ( [scalar] => ) 
-print_r(\PhpCast\Cast::cast("object", 9.2324)); // stdClass Object ( [scalar] => 9.2324 ) 
-print_r(\PhpCast\Cast::cast("object", "string")); // stdClass Object ( [scalar] => string ) 
-print_r(\PhpCast\Cast::cast("object", "432")); // stdClass Object ( [scalar] => 432 ) 
-print_r(\PhpCast\Cast::cast("object", "432.901")); // stdClass Object ( [scalar] => 432.901 ) 
-print_r(\PhpCast\Cast::cast("object", [])); // stdClass Object ( ) 
-print_r(\PhpCast\Cast::cast("object", [1, 2, 3])); // stdClass Object ( [0] => 1 [1] => 2 [2] => 3 )
-print_r(\PhpCast\Cast::cast("object", (object)[])); // stdClass Object ( ) 
-print_r(\PhpCast\Cast::cast("object", new Item())); // Item Object ( [missing] => ) 
-print_r(\PhpCast\Cast::cast("object", $fullItem)); // Item2 Object ( [id] => 2 [string] => string value [active] => 1 )
-print_r(\PhpCast\Cast::cast("object", $object1)); // stdClass Object ( [id] => 10 [string] => string name [active] => [nullableInt] => 101 [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 )
+// Cast to stdClass object
+test("object", null); // stdClass Object ( ) 
+test("object", 9); // stdClass Object ( [scalar] => 9 ) 
+test("object", false); // stdClass Object ( [scalar] => ) 
+test("object", 9.2324); // stdClass Object ( [scalar] => 9.2324 ) 
+test("object", "string"); // stdClass Object ( [scalar] => string ) 
+test("object", "432"); // stdClass Object ( [scalar] => 432 ) 
+test("object", "432.901"); // stdClass Object ( [scalar] => 432.901 ) 
+test("object", []); // stdClass Object ( ) 
+test("object", [1, 2, 3]); // stdClass Object ( [0] => 1 [1] => 2 [2] => 3 )
+test("object", (object)[]); // stdClass Object ( ) 
+test("object", new Item()); // Item Object ( [missing] => ) 
+test("object", $fullItem); // Item2 Object ( [id] => 2 [string] => string value [active] => 1 )
+test("object", $item1); // stdClass Object ( [id] => 10 [string] => string name [active] => [nullableInt] => 101 [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 )
+test("object", $object1); // stdClass Object ( [id] => 10 [string] => string name [active] => [nullableInt] => 101 [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 )
 
-// Cast to Custom Class
-print_r(\PhpCast\Cast::cast("Item", $item1)); // Item Object ( [id] => 10 [string] => string name [active] => [nullableInt] => 101 [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 )
-print_r(\PhpCast\Cast::cast("Item", $item2)); // Item Object ( [id] => 11 [string] => string name 2 [active] => [nullableInt] => [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 ) 
-print_r(\PhpCast\Cast::cast("Item2", $item1)); // Item2 Object ( [id] => 10 [string] => string name [active] => ) 
-print_r(\PhpCast\Cast::cast("Item2", $item2)); // Item2 Object ( [id] => 11 [string] => string name 2 [active] => )
-print_r(\PhpCast\Cast::cast("Item", $item2_2)); // Fatal error: Uncaught TypeError: Typed property Item::$array must be array, null used
-print_r(\PhpCast\Cast::cast("Item2", $item2_2)); // Item2 Object ( [id] => 200 [string] => string value 2200 [active] => 1 )
-print_r(\PhpCast\Cast::cast("MasterItem", $master)); // MasterItem Object ( [item1] => Item Object ( [id] => 10 [string] => string name [active] => [nullableInt] => 101 [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 ) [item2] => Item Object ( [id] => 11 [string] => string name 2 [active] => [nullableInt] => [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 ) [item3] => )
+// Cast to Custom Classes
+test("Item", $item1); // Item Object ( [id] => 10 [string] => string name [active] => [nullableInt] => 101 [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 )
+test("Item", $item2); // Item Object ( [id] => 11 [string] => string name 2 [active] => [nullableInt] => [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 ) 
+test("Item2", $item1); // Item2 Object ( [id] => 10 [string] => string name [active] => ) 
+test("Item2", $item2); // Item2 Object ( [id] => 11 [string] => string name 2 [active] => )
+test("Item", $item2_2); // Fatal error: Uncaught TypeError: Typed property Item::$array must be array, null used
+test("Item2", $item2_2); // Item2 Object ( [id] => 200 [string] => string value 2200 [active] => 1 )
+test("MasterItem", $master); // MasterItem Object ( [item1] => Item Object ( [id] => 10 [string] => string name [active] => [nullableInt] => 101 [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 ) [item2] => Item Object ( [id] => 11 [string] => string name 2 [active] => [nullableInt] => [array] => Array ( [0] => 1 [1] => 2 [2] => 3 ) [object] => stdClass Object ( [id] => 3 ) [float] => 10.003 [missing] => 10.003 ) [item3] => )
