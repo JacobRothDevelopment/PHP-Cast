@@ -1,16 +1,9 @@
-# PHP-Cast
+<?php
 
-Cast variables to different types. Native types, generic types, custom classes, nested classes, and more
+require_once __DIR__ . "/../src/Cast.php";
 
-# Install
+////////////////////////////////////////////////////////////////////
 
-```bash
-composer require php-cast/php-cast
-```
-
-# Usage
-
-```php
 // Example Classes and Data
 class Item1
 {
@@ -46,18 +39,20 @@ $ic_arr = [
     "item1" => $i1_arr,
     "item2" => $i2_arr,
 ];
-```
 
-```php
+////////////////////////////////////////////////////////////////////
+
 // Usage Examples of PhpCast
 
 \PhpCast\Cast::cast("Item1", $i1_arr);
+// print(print_r(\PhpCast\Cast::cast("Item1", $i1_arr), true)  . "\n");
 /* Item1 Object
 (
     [id] => 1
 ) */
 
 \PhpCast\Cast::cast("Item2", $i2_arr);
+// print(print_r(\PhpCast\Cast::cast("Item2", $i2_arr), true)  . "\n");
 /* Item2 Object
 (
     [id] => 2
@@ -66,6 +61,7 @@ $ic_arr = [
 ) */
 
 \PhpCast\Cast::cast("ItemCollective", $ic_arr);
+// print(print_r(\PhpCast\Cast::cast("ItemCollective", $ic_arr), true)  . "\n");
 /* ItemCollective Object
 (
     [item1] => Item1 Object
@@ -83,12 +79,14 @@ $ic_arr = [
 ) */
 
 \PhpCast\Cast::cast("Item1", $i2_arr);
+// print(print_r(\PhpCast\Cast::cast("Item1", $i2_arr), true)  . "\n");
 /* Item1 Object
 (
     [id] => 2
 ) */
 
 \PhpCast\Cast::cast("Item1", $i1_arr_str_id);
+// print(print_r(\PhpCast\Cast::cast("Item1", $i1_arr_str_id), true)  . "\n");
 /* Item1 Object
 (
     [id] => 11
@@ -96,10 +94,8 @@ $ic_arr = [
 
 \PhpCast\Cast::cast("int", 9.234);
 // 9
+// print(print_r(\PhpCast\Cast::cast("int", 9.234), true)  . "\n"); // 9
 
-\PhpCast\Cast::cast("int", 9.234, true); // TypeError - input is not of type "int"
-\PhpCast\Cast::cast("Item2", $i1_arr); // TypeError - non-nullable property "name"
-\PhpCast\Cast::cast("Item1", $i1_arr_str_id, true); // TypeError - property Item1::id is of type "int"
-```
-
-See more usage cases in `tests/`. Full and up-to-date examples will be available at `https://github.com/JacobRothDevelopment/PHP-Cast/tree/main/tests`
+// \PhpCast\Cast::cast("int", 9.234, true); // TypeError - input is not of type "int"
+// \PhpCast\Cast::cast("Item2", $i1_arr); // TypeError - non-nullable property "name"
+// \PhpCast\Cast::cast("Item1", $i1_arr_str_id, true); // TypeError - property Item1::id is of type "int"
