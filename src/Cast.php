@@ -70,12 +70,12 @@ class Cast
                  * Handling other stuff is dumb and hard work 
                  * and I don't want to do dumb and hard work */
                 if ($dataType !== "object") $data = (object)$data;
-                return Cast::castToClass($castType, $data);
+                return Cast::castToClass($castType, $data, $strict);
                 break;
         }
     }
 
-    private static function castToClass(string $class, $o)
+    private static function castToClass(string $class, $o, bool $strict)
     {
         $refClass = new \ReflectionClass($class);
         $obj = new $class;
@@ -89,7 +89,7 @@ class Cast
             if ($propType !== null) $propTypeName = $propType->getName();
 
             if (isset($o->$propName)) {
-                $obj->$propName = Cast::cast($propTypeName, $o->$propName);
+                $obj->$propName = Cast::cast($propTypeName, $o->$propName, $strict);
             } else {
                 $obj->$propName = null;
             }
