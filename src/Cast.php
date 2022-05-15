@@ -36,7 +36,12 @@ class Cast
                 return (array)$data;
                 break;
             case 'object':
-                return (object)$data;
+                if (gettype($data) === "object") {
+                    // do this to cast custom classes to stdClass Object
+                    return (object)((array)$data);
+                } else {
+                    return (object)$data;
+                }
                 break;
             case 'stdClass':
                 return (object)(array)$data;
