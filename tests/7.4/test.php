@@ -104,26 +104,26 @@ test("bool", (object)[], true);
 test("bool", new Item2(), true);
 
 // Cast to array
-test("array", null, []);
-test("array", 9, [9]);
-test("array", false, [false]);
-test("array", 9.2324, [9.2324]);
-test("array", "string", ["string"]);
-test("array", [], []);
-test("array", (object)[], []);
-test("array", new Item2(), ["missing" => null]);
-test("array", $fullItem, ["id" => 2, "string" => "string value", "active" => true, "missing" => null]);
+test("array", null, unserialize('a:0:{}')); // []
+test("array", 9, unserialize('a:1:{i:0;i:9;}')); // [9]
+test("array", false, unserialize('a:1:{i:0;b:0;}')); // [false]
+test("array", 9.2324, unserialize('a:1:{i:0;d:9.2324;}')); // [9.2324]
+test("array", "string", unserialize('a:1:{i:0;s:6:"string";}')); // ["string"]
+test("array", [], unserialize('a:0:{}')); // []
+test("array", (object)[], unserialize('a:0:{}')); // []
+test("array", new Item2(), unserialize('a:1:{s:7:"missing";N;}')); // ["missing" => null]
+test("array", $fullItem, unserialize('a:4:{s:2:"id";i:2;s:6:"string";s:12:"string value";s:6:"active";b:1;s:7:"missing";N;}')); // ["id" => 2, "string" => "string value", "active" => true, "missing" => null]
 
 // Cast to stdClass object
-test("object", null, (object)[]);
-test("object", 9, (object)["scalar" => 9]);
-test("object", false, (object)["scalar" => false]);
-test("object", 9.2324, (object)["scalar" => 9.2324]);
-test("object", "string", (object)["scalar" => "string"]);
-test("object", "432", (object)["scalar" => "432"]);
-test("object", "432.901", (object)["scalar" => "432.901"]);
-test("object", [], (object)[]);
-test("object", [1, 2, 3], (object)["0" => 1, "1" => 2, "2" => 3]);
+test("object", null, unserialize('O:8:"stdClass":0:{}'));
+test("object", 9, unserialize('O:8:"stdClass":1:{s:6:"scalar";i:9;}'));
+test("object", false, unserialize('O:8:"stdClass":1:{s:6:"scalar";b:0;}'));
+test("object", 9.2324, unserialize('O:8:"stdClass":1:{s:6:"scalar";d:9.2324;}'));
+test("object", "string", unserialize('O:8:"stdClass":1:{s:6:"scalar";s:6:"string";}'));
+test("object", "432", unserialize('O:8:"stdClass":1:{s:6:"scalar";s:3:"432";}'));
+test("object", "432.901", unserialize('O:8:"stdClass":1:{s:6:"scalar";s:7:"432.901";}'));
+test("object", [], unserialize('O:8:"stdClass":0:{}'));
+test("object", [1, 2, 3], unserialize('O:8:"stdClass":3:{s:1:"0";i:1;s:1:"1";i:2;s:1:"2";i:3;}'));
 test("object", (object)[], unserialize('O:8:"stdClass":0:{}'));
 test("object", new Item(), unserialize('O:8:"stdClass":1:{s:7:"missing";N;}'));
 test("object", $fullItem, unserialize('O:8:"stdClass":4:{s:2:"id";i:2;s:6:"string";s:12:"string value";s:6:"active";b:1;s:7:"missing";N;}'));
