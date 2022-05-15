@@ -4,13 +4,13 @@ $printOut = false;
 
 define("TEST_FAILURE", "TEST_FAILURE");
 
-function test(string $class, $value, $expectedOutput)
+function test_generic(string $class, $value, $expectedOutput, bool $strict)
 {
     global $printOut;
     if ($printOut) print(serialize($value) . "\n");
 
     try {
-        $out = \PhpCast\Cast::cast($class, $value);
+        $out = \PhpCast\Cast::cast($class, $value, $strict);
 
         if ($printOut) {
             print(print_r($out, true) . "\r\n");
@@ -40,4 +40,14 @@ function test(string $class, $value, $expectedOutput)
         $outJson = json_encode($out);
         throw new Error("Expected output not achieved :: expected :: $expectedOutputJson :: out :: $outJson");
     }
+}
+
+function test(string $class, $value, $expectedOutput)
+{
+    return test_generic($class, $value, $expectedOutput, false);
+}
+
+function test_strict(string $class, $value, $expectedOutput)
+{
+    return test_generic($class, $value, $expectedOutput, true);
 }
