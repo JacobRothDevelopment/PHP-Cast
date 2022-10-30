@@ -36,7 +36,7 @@ class Cast
                 break;
             case 'double':
             case 'float':
-                if ($strict && $dataType !== "double") throw $e;
+                if ($strict && !in_array($dataType, ["double", "integer"])) throw $e;
                 return (float)$data;
                 break;
             case 'string':

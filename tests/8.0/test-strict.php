@@ -80,7 +80,7 @@ test_strict("string", new Item2(), TEST_FAILURE);
 
 // Cast to float
 test_strict("float", null, TEST_FAILURE);
-test_strict("float", 9, TEST_FAILURE);
+test_strict("float", 9, 9.0);
 test_strict("float", false, TEST_FAILURE);
 test_strict("float", 9.2324, 9.2324);
 test_strict("float", "string", TEST_FAILURE);
